@@ -20,6 +20,8 @@ pipeline {
                 git branch: 'master' , url: 'https://github.com/aarsh2211/microservices-2.git'
             }
         }
+
+/*
             stage('Running Tests') {
             steps {
                 script {
@@ -32,7 +34,7 @@ pipeline {
                 }
             }
             }
-/*
+
        stage('Building Project'){
         steps{
             script{
@@ -40,7 +42,6 @@ pipeline {
             }
         }
        }
-    */
 
         stage('Analysing Coverage') {
             steps {
@@ -61,6 +62,7 @@ pipeline {
                 }
             }
         }
+          */
         stage('checking monorepo api-gateway') {
             when {
                 changeset '**/api-gateway/*.*'
@@ -77,7 +79,7 @@ pipeline {
             steps {
                 echo 'Building for eureka'
             }
-            }
+        }
 
         stage('checking monorepo product-service') {
             when {
@@ -86,7 +88,7 @@ pipeline {
             steps {
                 echo 'Building for product-service'
             }
-            }
+        }
 
         stage('checking monorepo user-service') {
             when {
@@ -95,7 +97,7 @@ pipeline {
             steps {
                 echo 'Building for user-service'
             }
-            }
+        }
         stage('checking monorepo caard-service') {
             when {
                 changeset '**/card-service/*.*'
@@ -103,7 +105,7 @@ pipeline {
             steps {
                 echo 'Building for card-service'
             }
-            }
+        }
 
 /*
         stage("Quality gate Analysis") {
@@ -133,5 +135,5 @@ pipeline {
             }
         }
         */
-        }
-        }
+    }
+}
