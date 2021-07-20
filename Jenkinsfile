@@ -1,79 +1,98 @@
 pipeline {
     agent any
-    
+
     tools {
-        maven "maven"
-       // jdk "Java"
+        maven 'maven'
+    // jdk "Java"
     }
 
     environment  {
-
         dockerImage = ''
         registry = 'akshit2707'
 
         //provide credentials in jenkins credentials and tag it as docker_id
         registryCredential = 'docker_id'
-
     }
-    
-    stages {
 
-        stage('Cloning Repository'){
+    stages {
+        stage('Cloning Repository') {
             steps {
-                  git branch: 'master' , url: 'https://github.com/aarsh2211/microservices-2.git'
-              
-        }
-        }
-            stage('Running Tests'){
-            steps{
-               script{
-                   try{
-                      bat "mvn test"
-                    
-                   }
-                   catch(error){
-                       throw error
-                   }
-               }
+                git branch: 'master' , url: 'https://github.com/aarsh2211/microservices-2.git'
             }
-            
         }
+            stage('Running Tests') {
+            steps {
+                script {
+                    try {
+                        bat 'mvn test'
+                    }
+                   catch (error) {
+                        throw error
+                   }
+                }
+            }
+            }
 /*
        stage('Building Project'){
         steps{
-            script{ 
+            script{
                  sh "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install"
             }
         }
-    }
+       }
     */
 
-        stage('Analysing Coverage'){
-            steps{
-                script{
-
-                    withSonarQubeEnv('SonarQube'){
-                       bat "mvn clean package sonar:sonar"
-
+        stage('Analysing Coverage') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        bat 'mvn clean package sonar:sonar'
                     }
                 }
             }
 
-            post{
-          
-           success{
-
-     step([$class: 'JacocoPublisher', 
+            post {
+                success {
+                    step([$class: 'JacocoPublisher',
       execPattern: 'target/*.exec',
       classPattern: 'target/classes',
       sourcePattern: 'src/main/java',
       exclusionPattern: 'src/test*'])
-           }
-                
+                }
             }
-
         }
-
+        stage('checking monorepo') {
+            when {
+                changeset '**/api-gateway/*.*'
+            }
+            steps {
+                echo 'Building for api-gateway'
+            }
+            when {
+                changeset '**/eureka/*.*'
+            }
+            steps {
+                echo 'Building for eureka'
+            }
+            when {
+                changeset '**/product-service/*.*'
+            }
+            steps {
+                echo 'Building for product-service'
+            }
+            when {
+                changeset '**/user-service/*.*'
+            }
+            steps {
+                echo 'Building for user-service'
+            }
+            when {
+                changeset '**/card-service/*.*'
+            }
+            steps {
+                echo 'Building for card-service'
+            }
+        }
 
 /*
         stage("Quality gate Analysis") {
@@ -81,8 +100,6 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }
-        
-
 
         stage("Dockerising Images")
         {
@@ -90,13 +107,10 @@ pipeline {
                  script{
 
                         sh "docker login -u akshit2707 -p password123"
-                }
-         }
+                 }
+            }
         }
 
-
-
-    
         stage("Pushing to DockerHub")
         {
             steps{
@@ -104,13 +118,9 @@ pipeline {
 
                           sh 'docker-compose up  --no-start'
                           sh 'docker-compose push'
-                }
-         }
+                 }
+            }
         }
         */
-             
     }
-
-  
-
 }
