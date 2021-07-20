@@ -21,6 +21,58 @@ pipeline {
             }
         }
 
+        stage('checking monorepo api-gateway') {
+            when {
+                changeset '**/api-gateway/*.*'
+            }
+            steps {
+                echo 'Building for api-gateway'
+
+                script {
+                    try {
+                        bat 'mvn test -pl api-gateway'
+                    } catch (error) {
+                        throw error
+                    }
+                }
+            }
+        }
+
+        stage('checking monorepo eureka') {
+            when {
+                changeset '**/eureka/*.*'
+            }
+            steps {
+                echo 'Building for eureka'
+            }
+        }
+
+        stage('checking monorepo product-service') {
+            when {
+                changeset '**/product-service/*.*'
+            }
+            steps {
+                echo 'Building for product-service'
+            }
+        }
+
+        stage('checking monorepo user-service') {
+            when {
+                changeset '**/user-service/*.*'
+            }
+            steps {
+                echo 'Building for user-service'
+            }
+        }
+        stage('checking monorepo caard-service') {
+            when {
+                changeset '**/card-service/*.*'
+            }
+            steps {
+                echo 'Building for card-service'
+            }
+        }
+
 /*
             stage('Running Tests') {
             steps {
@@ -63,49 +115,6 @@ pipeline {
             }
         }
           */
-        stage('checking monorepo api-gateway') {
-            when {
-                changeset '**/api-gateway/*.*'
-            }
-            steps {
-                echo 'Building for api-gateway'
-            }
-        }
-
-        stage('checking monorepo eureka') {
-            when {
-                changeset '**/eureka/*.*'
-            }
-            steps {
-                echo 'Building for eureka'
-            }
-        }
-
-        stage('checking monorepo product-service') {
-            when {
-                changeset '**/product-service/*.*'
-            }
-            steps {
-                echo 'Building for product-service'
-            }
-        }
-
-        stage('checking monorepo user-service') {
-            when {
-                changeset '**/user-service/*.*'
-            }
-            steps {
-                echo 'Building for user-service'
-            }
-        }
-        stage('checking monorepo caard-service') {
-            when {
-                changeset '**/card-service/*.*'
-            }
-            steps {
-                echo 'Building for card-service'
-            }
-        }
 
 /*
         stage("Quality gate Analysis") {
