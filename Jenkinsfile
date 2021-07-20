@@ -61,6 +61,8 @@ pipeline {
 
         }
 
+
+/*
         stage("Quality gate Analysis") {
             steps {
                 waitForQualityGate abortPipeline: true
@@ -68,7 +70,7 @@ pipeline {
         }
         
 
-/*
+
         stage("Dockerising Images")
         {
             steps{
