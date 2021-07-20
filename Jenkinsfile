@@ -68,6 +68,7 @@ pipeline {
         }
         
 
+/*
         stage("Dockerising Images")
         {
             steps{
@@ -91,6 +92,7 @@ pipeline {
                 }
          }
         }
+        */
              
     }
 
