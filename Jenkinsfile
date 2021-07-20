@@ -44,6 +44,13 @@ pipeline {
             }
             steps {
                 echo 'Building for eureka'
+                script {
+                    try {
+                        bat 'mvn test -pl eureka'
+                    } catch (error) {
+                        throw error
+                    }
+                }
             }
         }
 
@@ -53,6 +60,13 @@ pipeline {
             }
             steps {
                 echo 'Building for product-service'
+                script {
+                    try {
+                        bat 'mvn test -pl product-service'
+                    } catch (error) {
+                        throw error
+                    }
+                }
             }
         }
 
@@ -62,6 +76,13 @@ pipeline {
             }
             steps {
                 echo 'Building for user-service'
+                script {
+                    try {
+                        bat 'mvn test -pl user-service'
+                    } catch (error) {
+                        throw error
+                    }
+                }
             }
         }
         stage('checking monorepo caard-service') {
@@ -70,6 +91,13 @@ pipeline {
             }
             steps {
                 echo 'Building for card-service'
+                script {
+                    try {
+                        bat 'mvn test -pl card-service'
+                    } catch (error) {
+                        throw error
+                    }
+                }
             }
         }
 
