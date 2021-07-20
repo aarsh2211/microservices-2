@@ -28,7 +28,7 @@ pipeline {
             steps{
                script{
                    try{
-                      sh "mvn test"
+                      bat "mvn test"
                     
                    }
                    catch(error){
@@ -53,7 +53,7 @@ pipeline {
                 script{
 
                     withSonarQubeEnv('SonarQube'){
-                       sh "mvn sonar:sonar"
+                       bat "mvn sonar:sonar"
 
                     }
                 }
