@@ -31,6 +31,9 @@ pipeline {
                 script {
                     try {
                         bat 'mvn test -pl api-gateway'
+                        withSonarQubeEnv('SonarQube') {
+                            bat 'mvn clean package sonar:sonar -pl api-gateway'
+                        }
                     } catch (error) {
                         throw error
                     }
@@ -47,6 +50,9 @@ pipeline {
                 script {
                     try {
                         bat 'mvn test -pl eureka'
+                        withSonarQubeEnv('SonarQube') {
+                            bat 'mvn clean package sonar:sonar -pl eureka'
+                        }
                     } catch (error) {
                         throw error
                     }
@@ -63,6 +69,9 @@ pipeline {
                 script {
                     try {
                         bat 'mvn test -pl product-service'
+                        withSonarQubeEnv('SonarQube') {
+                            bat 'mvn clean package sonar:sonar -pl product-service'
+                        }
                     } catch (error) {
                         throw error
                     }
@@ -79,6 +88,9 @@ pipeline {
                 script {
                     try {
                         bat 'mvn test -pl user-service'
+                        withSonarQubeEnv('SonarQube') {
+                            bat 'mvn clean package sonar:sonar -pl user-service'
+                        }
                     } catch (error) {
                         throw error
                     }
@@ -94,6 +106,9 @@ pipeline {
                 script {
                     try {
                         bat 'mvn test -pl card-service'
+                        withSonarQubeEnv('SonarQube') {
+                            bat 'mvn clean package sonar:sonar -pl card-service'
+                        }
                     } catch (error) {
                         throw error
                     }
