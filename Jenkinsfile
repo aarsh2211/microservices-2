@@ -36,6 +36,7 @@ pipeline {
                                 sh 'mvn clean package sonar:sonar'
                             }
 
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/api-gateway:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -64,6 +65,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/eureka:latest'
                             docker.withRegistry( '', registryCredential )
                             {
@@ -90,7 +92,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/product-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -119,6 +121,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
+                            waitForQualityGate abortPipeline: true
 
                             dockerImage = docker.build registry + '/user-service:latest'
 
@@ -147,7 +150,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/card-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
