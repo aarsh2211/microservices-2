@@ -31,9 +31,14 @@ pipeline {
                 script {
                     try {
                         dir('api-gateway') {
-                                bat 'mvn test'
+                                sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
+                            }
+
+                            dockerImage = docker.build registry
+                            docker.withRegistry( '', registryCredential ) {
+                                dockerImage.push()
                             }
                         }
                     } catch (error) {
@@ -52,16 +57,21 @@ pipeline {
                 script {
                     try {
                         dir('eureka') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
-                        }}
+                                sh 'mvn clean package sonar:sonar'
+                            }
+                            dockerImage = docker.build registry
+                            docker.withRegistry( '', registryCredential ) {
+                                dockerImage.push()
+                            }
+                        }
                     } catch (error) {
                         throw error
-                        }
                     }
                 }
             }
+        }
 
         stage('checking monorepo product-service') {
             when {
@@ -72,9 +82,9 @@ pipeline {
                 script {
                     try {
                         dir('product-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                         }}
                     } catch (error) {
                         throw error
@@ -92,9 +102,9 @@ pipeline {
                 script {
                     try {
                         dir('user-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                         }}
                     } catch (error) {
                         throw error
@@ -111,9 +121,9 @@ pipeline {
                 script {
                     try {
                         dir('card-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                         }}
                     } catch (error) {
                         throw error
@@ -136,7 +146,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat 'mvn test'
+                        sh 'mvn test'
                     }
                    catch (error) {
                         throw error
@@ -157,7 +167,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('SonarQube') {
-                        bat 'mvn clean package sonar:sonar'
+                        sh 'mvn clean package sonar:sonar'
                     }
                 }
             }
