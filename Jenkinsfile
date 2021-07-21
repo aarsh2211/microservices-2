@@ -31,7 +31,7 @@ pipeline {
                 script {
                     try {
                         dir('api-gateway') {
-                                bat 'mvn test api-gateway'
+                                bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 bat 'mvn clean package sonar:sonar'
                             }
