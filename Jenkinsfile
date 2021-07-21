@@ -98,7 +98,6 @@ pipeline {
                                {
                                     dockerImage.push() }
                             }
-
                         }
                     } catch (error) {
                         throw error
@@ -135,7 +134,7 @@ pipeline {
                 }
             }
         }
-        stage('checking monorepo caard-service') {
+        stage('checking monorepo card-service') {
             when {
                 changeset '**/card-service/*.*'
             }
