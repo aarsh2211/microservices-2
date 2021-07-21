@@ -37,9 +37,12 @@ pipeline {
                             }
 
                             dockerImage = docker.build registry + ":$BUILD_NUMBER"
+
                             docker.withRegistry( '', registryCredential ) {
                                 script
-                               { dockerImage.push() }
+                               {
+                                    sh ' docker login -u akshit2707 -p passowrd123'
+                                    dockerImage.push() }
                             }
                         }
                     } catch (error) {
