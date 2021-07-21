@@ -41,7 +41,7 @@ pipeline {
                             docker.withRegistry( '', registryCredential ) {
                                 script
                                {
-                                    sh ' docker login -u akshit2707 -p password123'
+                                    sh ' docker login -u "akshit2707" -p "password123" docker.io'
                                     dockerImage.push() }
                             }
                         }
