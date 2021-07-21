@@ -30,9 +30,11 @@ pipeline {
 
                 script {
                     try {
-                        bat 'mvn test -pl api-gateway'
-                        withSonarQubeEnv('SonarQube') {
-                            bat 'mvn clean package sonar:sonar -pl .,api-gateway'
+                        dir('api-gateway') {
+                                bat 'mvn test api-gateway'
+                            withSonarQubeEnv('SonarQube') {
+                                bat 'mvn clean package sonar:sonar'
+                            }
                         }
                     } catch (error) {
                         throw error
@@ -49,16 +51,17 @@ pipeline {
                 echo 'Building for eureka'
                 script {
                     try {
-                        bat 'mvn test -pl eureka'
-                        withSonarQubeEnv('SonarQube') {
-                            bat 'mvn clean package sonar:sonar -pl .,eureka'
-                        }
+                        dir('eureka') {
+                            bat 'mvn test'
+                            withSonarQubeEnv('SonarQube') {
+                                bat 'mvn clean package sonar:sonar'
+                        }}
                     } catch (error) {
                         throw error
+                        }
                     }
                 }
             }
-        }
 
         stage('checking monorepo product-service') {
             when {
@@ -68,16 +71,17 @@ pipeline {
                 echo 'Building for product-service'
                 script {
                     try {
-                        bat 'mvn test -pl product-service'
-                        withSonarQubeEnv('SonarQube') {
-                            bat 'mvn clean package sonar:sonar -pl .,product-service'
-                        }
+                        dir('product-service') {
+                            bat 'mvn test'
+                            withSonarQubeEnv('SonarQube') {
+                                bat 'mvn clean package sonar:sonar'
+                        }}
                     } catch (error) {
                         throw error
+                        }
                     }
                 }
             }
-        }
 
         stage('checking monorepo user-service') {
             when {
@@ -87,26 +91,8 @@ pipeline {
                 echo 'Building for user-service'
                 script {
                     try {
-                        bat 'mvn test -pl user-service'
-                        withSonarQubeEnv('SonarQube') {
-                            bat 'mvn clean package sonar:sonar -pl .,user-service'
-                        }
-                    } catch (error) {
-                        throw error
-                    }
-                }
-            }
-        }
-        stage('checking monorepo caard-service') {
-            when {
-                changeset '**/card-service/*.*'
-            }
-            steps {
-                echo 'Building for card-service'
-                script {
-                    try {
-                        bat 'mvn test -pl card-service'
-                        dir('card-service') {
+                        dir('user-service') {
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 bat 'mvn clean package sonar:sonar'
                         }}
@@ -115,6 +101,33 @@ pipeline {
                         }
                     }
                 }
+            }
+        stage('checking monorepo caard-service') {
+            when {
+                changeset '**/card-service/*.*'
+            }
+            steps {
+                echo 'Building for card-service'
+                script {
+                    try {
+                        dir('card-service') {
+                            bat 'mvn test'
+                            withSonarQubeEnv('SonarQube') {
+                                bat 'mvn clean package sonar:sonar'
+                        }}
+                    } catch (error) {
+                        throw error
+                        }
+                    }
+                }
+            }
+
+            stage('showing code coverage') {
+                step([$class: 'JacocoPublisher',
+      execPattern: 'target/*.exec',
+      classPattern: 'target/classes',
+      sourcePattern: 'src/main/java',
+      exclusionPattern: 'src/test*'])
             }
 
 /*
@@ -189,4 +202,4 @@ pipeline {
         }
         */
         }
-    }
+        }
