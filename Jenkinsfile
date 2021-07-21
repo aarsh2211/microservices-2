@@ -123,7 +123,7 @@ pipeline {
             }
 
             stage('showing code coverage') {
-                setps {
+                steps {
                 step([$class: 'JacocoPublisher',
       execPattern: 'target/*.exec',
       classPattern: 'target/classes',
