@@ -23,6 +23,10 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
 		 <jacoco.version>0.8.6</jacoco.version>
+		 <sonar.exclusions>**/APIGatewayApplication.*</sonar.exclusions>
+		 <sonar.exclusions>**/App.*</sonar.exclusions>
+		<sonar.exclusions>**/EurekaServerApplication.*</sonar.exclusions>
+		
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
     <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
@@ -150,7 +154,13 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.6</version>
-			
+			<configuration>
+					<excludes>
+		 <exclude>**/APIGatewayApplication.*</exclude>
+		 <exclude>**/App.*</exclude>
+		<exclude>**/EurekaServerApplication.*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<id>jacoco-initialize</id>

@@ -36,12 +36,11 @@ pipeline {
                                 sh 'mvn clean package sonar:sonar'
                             }
 
-                            dockerImage = docker.build registry + "/api-gateway:latest"
+                            dockerImage = docker.build registry + '/api-gateway:latest'
 
                             docker.withRegistry( '', registryCredential ) {
                                 script
                                {
-                                    
                                     dockerImage.push() }
                             }
                         }
@@ -65,10 +64,9 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-                            dockerImage = docker.build registry + "/eureka:latest"
-                            docker.withRegistry( '', registryCredential ) 
+                            dockerImage = docker.build registry + '/eureka:latest'
+                            docker.withRegistry( '', registryCredential )
                             {
-
                                 dockerImage.push()
                             }
                         }
@@ -91,25 +89,23 @@ pipeline {
                             sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
-                        }
+                            }
 
-                        dockerImage = docker.build registry + "/product-service:latest"
+                            dockerImage = docker.build registry + '/product-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
                                 script
                                {
-                                    
                                     dockerImage.push() }
                             }
-                        
-                        
+
                         }
                     } catch (error) {
                         throw error
-                        }
                     }
                 }
             }
+        }
 
         stage('checking monorepo user-service') {
             when {
@@ -123,24 +119,22 @@ pipeline {
                             sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
-                        }
-                        
-                        
-                        dockerImage = docker.build registry + "/user-service:latest"
+                            }
+
+                            dockerImage = docker.build registry + '/user-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
                                 script
                                {
-                                    
                                     dockerImage.push() }
                             }
-                            }
+                        }
                     } catch (error) {
                         throw error
-                        }
                     }
                 }
             }
+        }
         stage('checking monorepo caard-service') {
             when {
                 changeset '**/card-service/*.*'
@@ -153,26 +147,22 @@ pipeline {
                             sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
-                        }
-                        
-                        
-                        
-                        dockerImage = docker.build registry + "/card-service:latest"
+                            }
+
+                            dockerImage = docker.build registry + '/card-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
                                 script
                                {
-                                    
                                     dockerImage.push() }
                             }
-                            
-                            }
+                        }
                     } catch (error) {
                         throw error
-                        }
                     }
                 }
             }
+        }
 
             stage('showing code coverage') {
                 steps {
@@ -254,5 +244,5 @@ pipeline {
             }
         }
         */
-        }
-        }
+    }
+}
