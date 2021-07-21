@@ -65,7 +65,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-                            dockerImage = docker.build registry + "/eureka:$BUILD_NUMBER"
+                            dockerImage = docker.build registry + "/eureka:latest"
                             docker.withRegistry( '', registryCredential ) 
                             {
 
@@ -91,7 +91,19 @@ pipeline {
                             sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
-                        }}
+                        }
+
+                        dockerImage = docker.build registry + "/product-service:latest"
+
+                            docker.withRegistry( '', registryCredential ) {
+                                script
+                               {
+                                    
+                                    dockerImage.push() }
+                            }
+                        
+                        
+                        }
                     } catch (error) {
                         throw error
                         }
@@ -111,7 +123,18 @@ pipeline {
                             sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
-                        }}
+                        }
+                        
+                        
+                        dockerImage = docker.build registry + "/user-service:latest"
+
+                            docker.withRegistry( '', registryCredential ) {
+                                script
+                               {
+                                    
+                                    dockerImage.push() }
+                            }
+                            }
                     } catch (error) {
                         throw error
                         }
@@ -130,7 +153,20 @@ pipeline {
                             sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
-                        }}
+                        }
+                        
+                        
+                        
+                        dockerImage = docker.build registry + "/card-service:latest"
+
+                            docker.withRegistry( '', registryCredential ) {
+                                script
+                               {
+                                    
+                                    dockerImage.push() }
+                            }
+                            
+                            }
                     } catch (error) {
                         throw error
                         }
