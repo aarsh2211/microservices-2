@@ -36,12 +36,12 @@ pipeline {
                                 sh 'mvn clean package sonar:sonar'
                             }
 
-                            dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                            dockerImage = docker.build registry + "/api-gateway:$BUILD_NUMBER"
 
                             docker.withRegistry( '', registryCredential ) {
                                 script
                                {
-                                    sh ' docker login -u "akshit2707" -p "password123" docker.io'
+                                    
                                     dockerImage.push() }
                             }
                         }
@@ -65,8 +65,10 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-                            dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                            docker.withRegistry( '', registryCredential ) {
+                            dockerImage = docker.build registry + "/eureka:$BUILD_NUMBER"
+                            docker.withRegistry( '', registryCredential ) 
+                            {
+
                                 dockerImage.push()
                             }
                         }
