@@ -36,7 +36,7 @@ pipeline {
                                 sh 'mvn clean package sonar:sonar'
                             }
 
-                            dockerImage = docker.build registry
+                            dockerImage = docker.build registry + ":$BUILD_NUMBER"
                             docker.withRegistry( '', registryCredential ) {
                                 dockerImage.push()
                             }
@@ -61,7 +61,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-                            dockerImage = docker.build registry
+                            dockerImage = docker.build registry + ":$BUILD_NUMBER"
                             docker.withRegistry( '', registryCredential ) {
                                 dockerImage.push()
                             }
