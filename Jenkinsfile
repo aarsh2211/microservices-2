@@ -36,7 +36,7 @@ pipeline {
                                 sh 'mvn clean package sonar:sonar'
                             }
 
-                            dockerImage = docker.build registry + "/api-gateway:$BUILD_NUMBER"
+                            dockerImage = docker.build registry + "/api-gateway:latest"
 
                             docker.withRegistry( '', registryCredential ) {
                                 script
