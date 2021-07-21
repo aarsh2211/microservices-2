@@ -106,15 +106,16 @@ pipeline {
                 script {
                     try {
                         bat 'mvn test -pl card-service'
-                        withSonarQubeEnv('SonarQube') {
-                            bat 'mvn clean package sonar:sonar -pl card-service'
-                        }
+                        dir('card-service') {
+                            withSonarQubeEnv('SonarQube') {
+                                bat 'mvn clean package sonar:sonar -pl card-service'
+                        }}
                     } catch (error) {
                         throw error
+                        }
                     }
                 }
             }
-        }
 
 /*
             stage('Running Tests') {
@@ -187,5 +188,5 @@ pipeline {
             }
         }
         */
+        }
     }
-}
