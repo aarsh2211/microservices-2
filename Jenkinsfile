@@ -108,7 +108,7 @@ pipeline {
                         bat 'mvn test -pl card-service'
                         dir('card-service') {
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar -pl card-service'
+                                bat 'mvn clean package sonar:sonar'
                         }}
                     } catch (error) {
                         throw error
