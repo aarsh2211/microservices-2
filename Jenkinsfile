@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven'
-        jdk 'Java'
+    //jdk 'Java'
     }
 
     environment  {
@@ -31,9 +31,9 @@ pipeline {
                 script {
                     try {
                         dir('api-gateway') {
-                                sh 'mvn test'
+                                bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
 
                             waitForQualityGate abortPipeline: true
@@ -61,9 +61,9 @@ pipeline {
                 script {
                     try {
                         dir('eureka') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/eureka:latest'
@@ -88,9 +88,9 @@ pipeline {
                 script {
                     try {
                         dir('product-service') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/product-service:latest'
@@ -117,9 +117,9 @@ pipeline {
                 script {
                     try {
                         dir('user-service') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
 
@@ -146,9 +146,9 @@ pipeline {
                 script {
                     try {
                         dir('card-service') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/card-service:latest'
@@ -169,8 +169,8 @@ pipeline {
             stage('showing code coverage') {
                 steps {
                 step([$class: 'JacocoPublisher',
-      execPattern: 'target/*.exec',
-      classPattern: 'target/classes',
+      execPattern: '**/target/*.exec',
+      classPattern: '**/target/classes',
       sourcePattern: 'src/main/java',
       exclusionPattern: 'src/test*'])}
             }
