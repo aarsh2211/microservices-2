@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven'
-    //jdk 'Java'
+        jdk 'Java'
     }
 
     environment  {
@@ -31,9 +31,9 @@ pipeline {
                 script {
                     try {
                         dir('api-gateway') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
 
                             dockerImage = docker.build registry + '/api-gateway:latest'
@@ -60,9 +60,9 @@ pipeline {
                 script {
                     try {
                         dir('eureka') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
 
                             dockerImage = docker.build registry + '/eureka:latest'
@@ -87,9 +87,9 @@ pipeline {
                 script {
                     try {
                         dir('product-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
 
                             dockerImage = docker.build registry + '/product-service:latest'
@@ -116,9 +116,9 @@ pipeline {
                 script {
                     try {
                         dir('user-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
 
                             dockerImage = docker.build registry + '/user-service:latest'
@@ -144,9 +144,9 @@ pipeline {
                 script {
                     try {
                         dir('card-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
 
                             dockerImage = docker.build registry + '/card-service:latest'
