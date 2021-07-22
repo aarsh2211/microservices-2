@@ -31,9 +31,9 @@ pipeline {
                 script {
                     try {
                         dir('api-gateway') {
-                                bat 'mvn test'
+                                sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
 
                             waitForQualityGate abortPipeline: true
@@ -61,9 +61,9 @@ pipeline {
                 script {
                     try {
                         dir('eureka') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/eureka:latest'
@@ -88,9 +88,9 @@ pipeline {
                 script {
                     try {
                         dir('product-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/product-service:latest'
@@ -117,9 +117,9 @@ pipeline {
                 script {
                     try {
                         dir('user-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
 
@@ -146,9 +146,9 @@ pipeline {
                 script {
                     try {
                         dir('card-service') {
-                            bat 'mvn test'
+                            sh 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                bat 'mvn clean package sonar:sonar'
+                                sh 'mvn clean package sonar:sonar'
                             }
                             waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/card-service:latest'
@@ -174,77 +174,5 @@ pipeline {
       sourcePattern: 'src/main/java',
       exclusionPattern: 'src/test*'])}
             }
-
-/*
-            stage('Running Tests') {
-            steps {
-                script {
-                    try {
-                        sh 'mvn test'
-                    }
-                   catch (error) {
-                        throw error
-                   }
-                }
-            }
-            }
-
-       stage('Building Project'){
-        steps{
-            script{
-                 sh "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install"
-            }
-        }
-       }
-
-        stage('Analysing Coverage') {
-            steps {
-                script {
-                    withSonarQubeEnv('SonarQube') {
-                        sh 'mvn clean package sonar:sonar'
-                    }
-                }
-            }
-
-            post {
-                success {
-                    step([$class: 'JacocoPublisher',
-      execPattern: 'target/*.exec',
-      classPattern: 'target/classes',
-      sourcePattern: 'src/main/java',
-      exclusionPattern: 'src/test*'])
-                }
-            }
-        }
-          */
-
-/*
-        stage("Quality gate Analysis") {
-            steps {
-                waitForQualityGate abortPipeline: true
-            }
-        }
-
-        stage("Dockerising Images")
-        {
-            steps{
-                 script{
-
-                        sh "docker login -u akshit2707 -p password123"
-                 }
-            }
-        }
-
-        stage("Pushing to DockerHub")
-        {
-            steps{
-                 script{
-
-                          sh 'docker-compose up  --no-start'
-                          sh 'docker-compose push'
-                 }
-            }
-        }
-        */
     }
 }
