@@ -1,0 +1,58 @@
+version: "3"
+services:
+  eureka:
+    container_name: eureka
+    image: akshit2707/eureka:latest
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    container_name: api-gateway
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+    image: akshit2707/api-gateway:latest
+    ports:
+      - "8765:8765"
+    links:
+      - eureka
+
+  user-service:
+    container_name: user-service
+    depends_on:
+      - eureka
+      - api-gateway
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+    image: akshit2707/card-service:latest
+    ports:
+      - "9050:9050"
+    links:
+      - eureka
+
+  card-service:
+    container_name: card-service
+    depends_on:
+      - eureka
+      - api-gateway
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+    image: akshit2707/user-service:latest
+    ports:
+      - "8050:8050"
+    links:
+      - eureka
+
+  product-service:
+    container_name: product-service
+    depends_on:
+      - eureka
+      - api-gateway
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+    image: akshit2707/product-service:latest
+    ports:
+      - "7050:7050"
+    links:
+      - eureka

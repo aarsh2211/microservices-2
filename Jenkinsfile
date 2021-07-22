@@ -35,7 +35,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/api-gateway:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -64,7 +64,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/eureka:latest'
                             docker.withRegistry( '', registryCredential )
                             {
@@ -91,7 +91,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/product-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -120,7 +120,7 @@ pipeline {
                             withSonarQubeEnv('SonarQube') {
                                 sh 'mvn clean package sonar:sonar'
                             }
-
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/user-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -149,6 +149,7 @@ pipeline {
                                 sh 'mvn clean package sonar:sonar'
                             }
 
+                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/card-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -164,14 +165,6 @@ pipeline {
             }
         }
 
-        stage('quality gate analysis') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
-
             stage('showing code coverage') {
                 steps {
                 step([$class: 'JacocoPublisher',
@@ -180,5 +173,11 @@ pipeline {
       sourcePattern: 'src/main/java',
       exclusionPattern: 'src/test*'])}
             }
+
+        stage('Deploying Service on EC2 instance') {
+            steps {
+                sh 'docker-compose -f ./compose-file/docker-compose.yml up -d'
+            }
+        }
     }
 }
