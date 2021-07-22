@@ -26,7 +26,7 @@
 		 
 	
 		
-		<sonar.coverage.exclusions>**/*App.*, **/APIGatewayApplication.*</sonar.coverage.exclusions> 
+	 <!--	<sonar.coverage.exclusions>**/*App.*, **/APIGatewayApplication.*</sonar.coverage.exclusions>  -->
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
     <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
@@ -154,7 +154,7 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.6</version>
-			
+		<!--	
 			<configuration>
 				
 					<excludes>
@@ -167,7 +167,7 @@
 					</excludes>
 					
 				</configuration>
-				
+				-->
 				<executions>
 					<execution>
 						<id>jacoco-initialize</id>

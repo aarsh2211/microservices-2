@@ -31,12 +31,11 @@ pipeline {
                 script {
                     try {
                         dir('api-gateway') {
-                                sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
 
-                            waitForQualityGate abortPipeline: true
                             dockerImage = docker.build registry + '/api-gateway:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -61,11 +60,11 @@ pipeline {
                 script {
                     try {
                         dir('eureka') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
-                            waitForQualityGate abortPipeline: true
+
                             dockerImage = docker.build registry + '/eureka:latest'
                             docker.withRegistry( '', registryCredential )
                             {
@@ -88,11 +87,11 @@ pipeline {
                 script {
                     try {
                         dir('product-service') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
-                            waitForQualityGate abortPipeline: true
+
                             dockerImage = docker.build registry + '/product-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -117,11 +116,10 @@ pipeline {
                 script {
                     try {
                         dir('user-service') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
-                            waitForQualityGate abortPipeline: true
 
                             dockerImage = docker.build registry + '/user-service:latest'
 
@@ -146,11 +144,11 @@ pipeline {
                 script {
                     try {
                         dir('card-service') {
-                            sh 'mvn test'
+                            bat 'mvn test'
                             withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package sonar:sonar'
+                                bat 'mvn clean package sonar:sonar'
                             }
-                            waitForQualityGate abortPipeline: true
+
                             dockerImage = docker.build registry + '/card-service:latest'
 
                             docker.withRegistry( '', registryCredential ) {
@@ -162,6 +160,14 @@ pipeline {
                     } catch (error) {
                         throw error
                     }
+                }
+            }
+        }
+
+        stage('quality gate analysis') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
